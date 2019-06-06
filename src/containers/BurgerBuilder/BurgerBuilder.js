@@ -7,6 +7,7 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/ui/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import { withRouter } from 'react-router-dom'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -114,6 +115,7 @@ class BurgerBuilder extends Component {
                     loading: false,
                     purchasing: false
                 });
+                this.props.history.push('/checkout');
             })
             .catch(error => {
                 console.log(error);
@@ -168,4 +170,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default withErrorHandler(BurgerBuilder, axios);
+export default withRouter(withErrorHandler(BurgerBuilder, axios));
