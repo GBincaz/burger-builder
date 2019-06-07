@@ -7,7 +7,6 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/ui/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { withRouter } from 'react-router-dom'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -90,40 +89,10 @@ class BurgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        //alert('You continue:')
-        this.setState({
-            loading: true
-        });
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'G B',
-                address: {
-                    street: 'Test street',
-                    zipCode: '78900',
-                    country: 'France'
-                },
-                email: 'a@a.com'
-            },
-            deliveryMethod: 'fastest'
-        };
-        axios.post('/orders.json', order)
-            .then(response => {
-                console.log(response);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-                this.props.history.push('/checkout');
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({
-                    loading: false,
-                    purchasing: false
-                });
-            });
+        let paramsEntries = Object.entries(this.state.ingredients);
+        paramsEntries = paramsEntries.concat([['totalPrice', this.state.totalPrice]]);
+        let urlParameters = paramsEntries.map(e => e.join('=')).join('&');
+        this.props.history.push('/checkout?' + urlParameters);
     };
 
     render() {
@@ -170,4 +139,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default withRouter(withErrorHandler(BurgerBuilder, axios));
+export default withErrorHandler(BurgerBuilder, axios);
